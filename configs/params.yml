@@ -50,6 +50,6 @@ optimize:
     min_beacons_per_session: 3
 
 
-URI: "mongodb+srv://guancho:Julio%407%408%408@marketdata.nclhx.mongodb.net/test"
+URI: "mongodb+srv://[user]:[data}"
 DB: "ES"
 COLLECTION: "5M"
