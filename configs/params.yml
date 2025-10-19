@@ -1,7 +1,7 @@
 start_date: "2025-01-01"
 end_date:   "2025-02-28"
 instrument: "ES"
-timeframe: "5m"
+timeframe: "5M"
 tick_size: 0.25
 ep_mode: "static"      # "static" | "rolling"
 rolling_bars: 1000     # used if ep_mode == "rolling"
@@ -48,3 +48,8 @@ optimize:
     use_close_only: true
     max_beacons_per_session: 12
     min_beacons_per_session: 3
+
+
+URI: "mongodb+srv://guancho:Julio%407%408%408@marketdata.nclhx.mongodb.net/test"
+DB: "ES"
+COLLECTION: "5M"
