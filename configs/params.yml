@@ -1,0 +1,50 @@
+start_date: "2025-01-01"
+end_date:   "2025-02-28"
+instrument: "ES"
+timeframe: "5m"
+tick_size: 0.25
+ep_mode: "static"      # "static" | "rolling"
+rolling_bars: 1000     # used if ep_mode == "rolling"
+
+n_prev_sessions: 4
+price_range: null      # [min, max] or null
+
+filter:
+  method: percentile   # percentile | topN
+  value: 95            # if percentile -> P95
+  topN: 12             # if method == topN
+
+cluster:
+  merge_ticks: 1
+
+horizon: "next_session"
+
+metrics:
+  X_touch_ticks: 1
+  K_density_ticks: 3
+  M_contrast_ticks: 8
+  refractory_min: 10
+  decay: 0.6
+
+weights_init:
+  High:  0.25
+  Low:   0.25
+  Close: 0.25
+  MVC:   0.20
+  UpperWick: 0.03
+  LowerWick: 0.02
+
+use_volume: true
+volume_feats: ["VolAtLevel", "VPGradient", "MVC_anchor"]
+volume_transform: "log1p_zscore"
+wv_init: 0.25
+crowding_beta: 0.5
+purity_gamma: 0.2
+
+optimize:
+  n_trials: 50
+  study_direction: "maximize"
+  constraints:
+    use_close_only: true
+    max_beacons_per_session: 12
+    min_beacons_per_session: 3
