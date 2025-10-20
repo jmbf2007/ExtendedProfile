@@ -17,3 +17,15 @@ def infer_sessions(df: pd.DataFrame, gap_minutes: int = 30) -> pd.DataFrame:
     out.loc[out.index.min(), "NewSession"] = True
     out["SessionId"] = out["NewSession"].cumsum()
     return out
+
+def last_complete_session(df):
+    starts = df.index[df["NewSession"]].to_list()
+    if len(starts) >= 2:
+        start, end = starts[-2], starts[-1]
+    elif len(starts) == 1:
+        start, end = starts[0], len(df)
+    else:
+        raise ValueError("No hay NewSession=True")
+    sid = int(df.loc[start, "SessionId"])
+    return sid, df.iloc[start:end].copy()
+

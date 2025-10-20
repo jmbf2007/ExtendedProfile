@@ -5,6 +5,8 @@ import datetime as dt
 from typing import List, Optional
 from pymongo import MongoClient
 import numpy as np
+from pathlib import Path
+import os, yaml
 
 def load_data_mongo(
     uri: str,
@@ -59,3 +61,24 @@ def load_data_mongo(
     
 
     return df
+
+
+
+def load_params(base_path=Path("../configs/params.yml"), local_path=Path("../configs/params.local.yml")):
+    with open(base_path, "r", encoding="utf-8") as f:
+        P = yaml.safe_load(f) or {}
+
+    # override local si existe
+    if local_path.exists():
+        with open(local_path, "r", encoding="utf-8") as f:
+            L = yaml.safe_load(f) or {}
+        # merge superficial
+        for k, v in L.items():
+            P[k] = v if not isinstance(v, dict) else {**P.get(k, {}), **v}
+
+    # variables de entorno (prioridad máxima)
+    P.setdefault("secrets", {})
+    P["secrets"]["URI"] = os.getenv("URI", P["secrets"].get("URI"))
+    P["secrets"]["DB"]  = os.getenv("DB",  P["secrets"].get("DB"))
+    P["secrets"]["COLLECTION"]= os.getenv("COLLECTION",P["secrets"].get("COLLECTION"))
+    return P

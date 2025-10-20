@@ -50,6 +50,4 @@ optimize:
     min_beacons_per_session: 3
 
 
-URI: "mongodb+srv://[user]:[data}"
-DB: "ES"
-COLLECTION: "5M"
+>>>>>>> 9c4fe6c (feat: cálculo HUE denso, CL robusto, plots con velas y etiquetas, corrección sesiones completas)

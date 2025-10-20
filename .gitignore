@@ -4,7 +4,12 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+
+# Secrets / overrides locales
 .env
+configs/params.local.yml
+configs/secrets.*
+
 .ipynb_checkpoints/
 
 # Data & outputs

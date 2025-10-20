@@ -55,3 +55,26 @@ def crowd_aware_score(scored_df: pd.DataFrame, density_k: pd.Series, cp: pd.Seri
         cp_s = cp.reindex(df.index).fillna(0.0)
     df["Score_star"] = df["Score"] - beta*dens_z + gamma*cp_s
     return df
+
+def compute_cp_series(ep_df, families=("High","Low","Close","MVC","UpperWick","LowerWick"),
+                      denominator="available"):
+    """
+    CP (pureza de confluencia): nº de familias presentes / denominador.
+    - Si denominator="available": divide por nº de familias **presentes en ep_df** (recomendado).
+    - Si denominator="total": divide por len(families) (6), penaliza columnas no calculadas.
+    """
+    import pandas as pd
+    if ep_df is None or ep_df.empty:
+        return pd.Series(dtype="float64", name="CP")
+
+    # Familias realmente disponibles en este EP
+    avail = [f for f in families if f in ep_df.columns]
+    if not avail:
+        return pd.Series(0.0, index=ep_df.index, name="CP")
+
+    present = (ep_df[avail].fillna(0) > 0).sum(axis=1).astype("float64")
+    denom = float(len(avail) if denominator == "available" else len(families))
+    cp = (present / denom).clip(0.0, 1.0)
+    return cp.rename("CP")
+
+
